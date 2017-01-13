@@ -199,31 +199,21 @@ public class Config {
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
 
-    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(24) {{
+    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(14) {{
         put("basalt", new CheckListboxItem("Basalt"));
-        put("limonite", new CheckListboxItem("Limonite"));
         put("schist", new CheckListboxItem("Schist"));
         put("dolomite", new CheckListboxItem("Dolomite"));
-        put("magnetite", new CheckListboxItem("Black Ore"));
         put("gneiss", new CheckListboxItem("Gneiss"));
         put("granite", new CheckListboxItem("Granite"));
-        put("malachite", new CheckListboxItem("Malachite"));
-        put("hematite", new CheckListboxItem("Bloodstone"));
         put("porphyry", new CheckListboxItem("Porphyry"));
-        put("ilmenite", new CheckListboxItem("Heavy Earth"));
         put("quartz", new CheckListboxItem("Quartz"));
-        put("cassiterite", new CheckListboxItem("Cassiterite"));
         put("limestone", new CheckListboxItem("Limestone"));
         put("sandstone", new CheckListboxItem("Sandstone"));
-        put("chalcopyrite", new CheckListboxItem("Chalcopyrite"));
         put("cinnabar", new CheckListboxItem("Cinnabar"));
         put("feldspar", new CheckListboxItem("Feldspar"));
         put("marble", new CheckListboxItem("Marble"));
-        put("nagyagite", new CheckListboxItem("Leaf Ore"));
         put("flint", new CheckListboxItem("Flint"));
-        put("hornsilver", new CheckListboxItem("Horn Silver"));
         put("blackcoal", new CheckListboxItem("Black Coal"));
-        put("argentite", new CheckListboxItem("Silvershine"));
     }};
 
     public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(22) {{
