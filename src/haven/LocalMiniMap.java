@@ -213,12 +213,12 @@ public class LocalMiniMap extends Widget {
                     } else if (res.name.startsWith("gfx/terobjs/bushes")) {
                         CheckListboxItem itm = Config.bushes.get(basename);
                         if (itm != null && itm.selected) {
-                            g.image(bushicn, p2c(gob.rc).add(delta).sub(3, 3));
+                            g.image(bushicn, p2c(gob.rc).add(delta).sub(7, 10));
                         }
                     } else if (res.name.startsWith("gfx/terobjs/trees")) {
                         CheckListboxItem itm = Config.trees.get(basename);
                         if (itm != null && itm.selected) {
-                            g.image(treeicn, p2c(gob.rc).add(delta).sub(3, 3));
+                            g.image(treeicn, p2c(gob.rc).add(delta).sub(8, 10));
                         }
                     }
                 } catch (Loading l) {
@@ -459,7 +459,7 @@ public class LocalMiniMap extends Widget {
             if (Config.mapshowviewdist) {
                 Gob player = mv.player();
                 if (player != null)
-                    g.image(gridblue, p2c(player.rc).add(delta).sub(44, 44));
+                	g.image(gridblue, p2c(player.rc.div(100).floor().sub(4, 4).mul(100)).add(delta))
             }
         }
         drawicons(g);
