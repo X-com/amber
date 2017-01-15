@@ -34,6 +34,7 @@ import java.util.*;
 
 public class MCache {
     public static final Coord2d tilesz = new Coord2d(11, 11);
+    public static final Coord2d serverTilesz = new Coord2d(100, 100);
     public static final Coord tilesz2 = tilesz.round(); /* XXX: Remove me in due time. */
     public static final Coord cmaps = new Coord(100, 100);
     public static final Coord cutsz = new Coord(25, 25);
