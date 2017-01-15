@@ -65,6 +65,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private static final Map<String, Class<? extends Camera>> camtypes = new HashMap<String, Class<? extends Camera>>();
     private String tooltip;
     private boolean showgrid;
+    private boolean showgridserver;
     private TileOutline gridol;
     private Coord lasttc = Coord.z;
     private static final Gob.Overlay rovlsupport = new Gob.Overlay(new BPRadSprite(100.0F, 0, BPRadSprite.smatDanger));
@@ -992,6 +993,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         rl.add(map, null);
         if (showgrid)
             rl.add(gridol, null);
+        if (showgridserver)
+            rl.add(gridol, null);
         rl.add(mapol, null);
         rl.add(gobs, null);
         if (placing != null)
@@ -1447,6 +1450,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 if (!tc.equals(lasttc)) {
                     lasttc = tc;
                     gridol.update(tc);
+                }
+            }
+            if (showgridserver) {
+            	Coord tc = new Coord((int)(cc.x / MCache.serverTilesz.x - 10) * MCache.cmaps.x,
+                        (int)(cc.y / MCache.serverTilesz.y - 10) * MCache.cmaps.y);
+                if (!tc.equals(lasttc)) {
+                    lasttc = tc;
+                    gridol.updateServergrid(tc);
                 }
             }
         } catch (Loading e) {
@@ -2307,7 +2318,17 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             gridol.update(tc);
         }
     }
-
+    
+    public void togglegridserver() {
+    	showgridserver = !showgridserver;
+        if (showgridserver) {
+            Coord tc = new Coord((int) (cc.x / tilesz.x / MCache.cutsz.x - view - 1) * MCache.cutsz.x,
+                    (int) (cc.y / tilesz.y / MCache.cutsz.y - view - 1) * MCache.cutsz.y);
+            lasttc = tc;
+            gridol.updateServergrid(tc);
+        }
+    }
+    
     public void aggroclosest() {
         OCache oc = ui.sess.glob.oc;
         synchronized (oc) {
