@@ -67,7 +67,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private boolean showgrid;
     private boolean showgridserver;
     private TileOutline gridol;
+    private TileOutline gridolserver;
     private Coord lasttc = Coord.z;
+    private Coord lasttcs = Coord.z;
     private static final Gob.Overlay rovlsupport = new Gob.Overlay(new BPRadSprite(100.0F, 0, BPRadSprite.smatDanger));
     private static final Gob.Overlay rovlcolumn = new Gob.Overlay(new BPRadSprite(125.0F, 0, BPRadSprite.smatDanger));
     private static final Gob.Overlay rovltrough = new Gob.Overlay(new BPRadSprite(200.0F, -10.0F, BPRadSprite.smatTrough));
@@ -510,6 +512,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         this.plgob = plgob;
         this.gobs = new Gobs();
         this.gridol = new TileOutline(glob.map);
+        this.gridolserver = new TileOutline(glob.map);
         this.partyHighlight = new PartyHighlight(glob.party, plgob);
         setcanfocus(true);
         markedGobs.clear();
@@ -994,7 +997,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         if (showgrid)
             rl.add(gridol, null);
         if (showgridserver)
-            rl.add(gridol, null);
+            rl.add(gridolserver, null);
         rl.add(mapol, null);
         rl.add(gobs, null);
         if (placing != null)
@@ -1420,6 +1423,30 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     }
 
     private Loading camload = null, lastload = null;
+    
+    private Coord getServerCoord(Coord2d c){
+    	int addX = c.x < 0 ? -1 : 0;
+    	int addY = c.y < 0 ? -1 : 0;
+    	//int addX = 0, addY = 0;
+    	return new Coord(((int)(c.x / 1100) + addX) * 1100,
+                ((int)(c.y / 1100) + addY) * 1100);
+    }
+    
+    public void serverGridDrawing(Coord2d c){
+    	Coord tc = gridCoord(c);
+        if (!tc.equals(lasttcs)) {
+        	Coord sc = getServerCoord(c);
+        	lasttcs = tc;
+            gridolserver.updateServergrid(tc, sc);
+        }
+    }
+    
+    private Coord gridCoord(Coord2d c){
+    	int addX = c.x < 0 ? 0 : 1;
+    	int addY = c.y < 0 ? 0 : 1;
+    	return new Coord((int)(cc.x / tilesz.x / MCache.cutsz.x - view - 1 + addX) * MCache.cutsz.x,
+                (int)(cc.y / tilesz.y / MCache.cutsz.y - view - 1 + addY) * MCache.cutsz.y);
+    }
 
     public void draw(GOut g) {
         glob.map.sendreqs();
@@ -1445,20 +1472,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             }
 
             if (showgrid) {
-                Coord tc = new Coord((int)(cc.x / tilesz.x / MCache.cutsz.x - view - 1) * MCache.cutsz.x,
-                        (int)(cc.y / tilesz.y / MCache.cutsz.y - view - 1) * MCache.cutsz.y);
+                Coord tc = gridCoord(cc);
                 if (!tc.equals(lasttc)) {
                     lasttc = tc;
                     gridol.update(tc);
                 }
             }
             if (showgridserver) {
-            	Coord tc = new Coord((int)(cc.x / MCache.serverTilesz.x - 10) * MCache.cmaps.x,
-                        (int)(cc.y / MCache.serverTilesz.y - 10) * MCache.cmaps.y);
-                if (!tc.equals(lasttc)) {
-                    lasttc = tc;
-                    gridol.updateServergrid(tc);
-                }
+            	serverGridDrawing(cc);
             }
         } catch (Loading e) {
             lastload = e;
@@ -2312,8 +2333,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void togglegrid() {
         showgrid = !showgrid;
         if (showgrid) {
-            Coord tc = new Coord((int) (cc.x / tilesz.x / MCache.cutsz.x - view - 1) * MCache.cutsz.x,
-                    (int) (cc.y / tilesz.y / MCache.cutsz.y - view - 1) * MCache.cutsz.y);
+        	Coord tc = gridCoord(cc);
             lasttc = tc;
             gridol.update(tc);
         }
@@ -2322,10 +2342,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void togglegridserver() {
     	showgridserver = !showgridserver;
         if (showgridserver) {
-            Coord tc = new Coord((int) (cc.x / tilesz.x / MCache.cutsz.x - view - 1) * MCache.cutsz.x,
-                    (int) (cc.y / tilesz.y / MCache.cutsz.y - view - 1) * MCache.cutsz.y);
-            lasttc = tc;
-            gridol.updateServergrid(tc);
+        	serverGridDrawing(cc);
         }
     }
     

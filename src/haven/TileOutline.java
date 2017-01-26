@@ -66,26 +66,39 @@ public class TileOutline implements Rendered {
         return new Coord3f((float) ((c.x - ul.x) * tilesz.x), (float) (-(c.y - ul.y) * tilesz.y), map.getz(c));
     }
     
-    public void updateServergrid(Coord ul) {
+    public void updateServergrid(Coord tc, Coord ul) {
         try {
             this.ul = ul;
-            this.location = Location.xlate(new Coord3f((float) (ul.x), (float) (-ul.y), 0.0F));
+            this.location = Location.xlate(new Coord3f((float) ul.x, (float) -ul.y, 0.0F));
             swapBuffers();
             Coord c = new Coord();
-            Coord size = ul.add(MCache.cutsz.mul(100));
-            for (c.y = ul.y; c.y < size.y; c.y += 11)
-                for (c.x = ul.x; c.x < size.x; c.x += 100)
+            tc = tc.mul(11);
+            Coord size = tc.add(MCache.cutsz.mul(55));
+            ul = ul.sub(1100, 1100);
+            System.out.println(tc + " " + ul + " " + size);
+            //addLineStrip(mapToScreenServergrid(ul), mapToScreenServergrid(tc));
+            //addLineStrip(mapToScreenServergrid(size), mapToScreenServergrid(tc));
+            for (c.y = ul.y; c.y < size.y; c.y += 11){
+            	if(c.y < tc.y) continue;
+                for (c.x = ul.x; c.x < size.x; c.x += 100){
+                	if(c.x < tc.x) continue;
                 	addLineStrip(mapToScreenServergrid(c), mapToScreenServergrid(c.add(0, 11)) );
-            for (c.y = ul.y; c.y < size.y; c.y += 100)
-                for (c.x = ul.x; c.x < size.x; c.x += 11)
+                }
+            }
+            for (c.x = ul.x; c.x < size.x; c.x += 11){
+            	if(c.x < tc.x) continue;
+            	for (c.y = ul.y; c.y < size.y; c.y += 100){
+            		if(c.y < tc.y) continue;
                 	addLineStrip(mapToScreenServergrid(c), mapToScreenServergrid(c.add(11, 0)) );
+        		}
+    		}
         } catch (Loading e) {
         	System.out.println(e);
         }
     }
 
     private Coord3f mapToScreenServergrid(Coord c) {
-        return new Coord3f((float)( (c.x - ul.x) * 1), (float) (-(c.y - ul.y) * 1), (float) map.getcz(c));
+        return new Coord3f((float)(c.x - ul.x), (float) -(c.y - ul.y), (float) map.getcz(c));
     }
 
     private void addLineStrip(Coord3f... vertices) {
