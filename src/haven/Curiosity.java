@@ -57,10 +57,10 @@ public class Curiosity extends ItemInfo.Tip {
         int studytime = (int) (st * 60);
         int hours = (int) (studytime / 60);
         int minutes = studytime - hours * 60;
-        int lph = (int)(exp/st);
+        float lph = (float)(exp/st);
 
-        if(minutes == 0) return String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Time: Hours $col[255,192,255]{%d}\nLP per hour: $col[255,192,255]{%d}\n"), hours, lph);
-        return String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Time: Hours $col[255,192,255]{%d} Minutes $col[255,192,255]{%d}\nLP per hour: $col[255,192,255]{%d}\n"), hours, minutes, lph);
+        if(minutes == 0) return String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Time: Hours $col[255,192,255]{%d}\nLP per hour: $col[255,192,255]{%.1f}\n"), hours, lph);
+        return String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Time: Hours $col[255,192,192]{%d} Minutes $col[255,192,192]{%d}\nLP per hour: $col[192,192,255]{%.1f}\n"), hours, minutes, lph);
     }
 
     public BufferedImage tipimg() {
