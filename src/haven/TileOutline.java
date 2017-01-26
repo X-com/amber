@@ -75,9 +75,6 @@ public class TileOutline implements Rendered {
             tc = tc.mul(11);
             Coord size = tc.add(MCache.cutsz.mul(55));
             ul = ul.sub(1100, 1100);
-            System.out.println(tc + " " + ul + " " + size);
-            //addLineStrip(mapToScreenServergrid(ul), mapToScreenServergrid(tc));
-            //addLineStrip(mapToScreenServergrid(size), mapToScreenServergrid(tc));
             for (c.y = ul.y; c.y < size.y; c.y += 11){
             	if(c.y < tc.y) continue;
                 for (c.x = ul.x; c.x < size.x; c.x += 100){
